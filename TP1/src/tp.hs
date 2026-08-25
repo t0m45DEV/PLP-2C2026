@@ -38,3 +38,10 @@ foldCircuito casoCaja casoSerie casoParalelo = recrCircuito
     (\c1 c2 _ _ -> casoSerie c1 c2)
     (\ca1 ci1 ci2 ca2 _ _ -> casoParalelo ca1 ci1 ci2 ca2)
 
+-- Ejercicio 3
+invertido :: Circuito -> Circuito
+invertido = foldCircuito
+    Caja
+    (\c1 c2 -> Serie c2 c1)
+    (\ca1 ci1 ci2 ca2 -> Paralelo ca2 ci2 ci1 ca1)
+
