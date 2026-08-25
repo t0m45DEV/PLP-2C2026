@@ -70,3 +70,10 @@ cuantasPrendidas c1 c2 = if estaEncendida c1 && estaEncendida c2 then 2
                         else if not (estaEncendida c1) && estaEncendida c2 then 1
                         else 0
 
+-- Ejercicio 6
+cajasDeCircuito :: Circuito -> [Caja]
+cajasDeCircuito = foldCircuito
+    (\c -> [c])
+    (\c1 c2 -> c1 ++ c2)
+    (\ca1 ci1 ci2 ca2 -> [ca1] ++ ci1 ++ ci2 ++ [ca2])
+
