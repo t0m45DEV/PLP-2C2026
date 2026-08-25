@@ -57,3 +57,16 @@ estaEncendida c = case c of
     Bombilla True -> True
     _ -> False
 
+-- Ejercicio 5
+cantidadPrendidas :: Circuito -> Int
+cantidadPrendidas = foldCircuito
+    (\c -> if estaEncendida c then 1 else 0)
+    (\c1 c2 -> c1 + c2)
+    (\ca1 ci1 ci2 ca2 -> ci1 + ci2 + (cuantasPrendidas ca1 ca2))
+
+cuantasPrendidas :: Caja -> Caja -> Int
+cuantasPrendidas c1 c2 = if estaEncendida c1 && estaEncendida c2 then 2
+                        else if estaEncendida c1 && not (estaEncendida c2) then 1
+                        else if not (estaEncendida c1) && estaEncendida c2 then 1
+                        else 0
+
