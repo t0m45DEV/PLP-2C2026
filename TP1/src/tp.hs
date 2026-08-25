@@ -45,3 +45,15 @@ invertido = foldCircuito
     (\c1 c2 -> Serie c2 c1)
     (\ca1 ci1 ci2 ca2 -> Paralelo ca2 ci2 ci1 ca1)
 
+-- Ejercicio 4
+hayCaminoIluminado :: Circuito -> Bool
+hayCaminoIluminado = foldCircuito
+    estaEncendida
+    (\c1 c2 -> c1 && c2)
+    (\ca1 ci1 ci2 ca2 -> estaEncendida ca1 && estaEncendida ca2 && (ci1 || ci2))
+
+estaEncendida :: Caja -> Bool
+estaEncendida c = case c of
+    Bombilla True -> True
+    _ -> False
+
