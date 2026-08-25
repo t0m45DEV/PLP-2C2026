@@ -23,3 +23,11 @@ ejemplo = Serie
                 on
             )
 
+-- Ejercicio 1
+recrCircuito :: (Caja -> b) -> (b -> b -> Circuito -> Circuito -> b) -> (Caja -> b -> b -> Caja -> Circuito -> Circuito -> b) -> Circuito -> b
+recrCircuito casoCaja casoSerie casoParalelo c = case c of
+    Caja x -> casoCaja x
+    Serie c1 c2 -> casoSerie (rec c1) (rec c2) c1 c2
+    Paralelo ca1 ci1 ci2 ca2 -> casoParalelo ca1 (rec ci1) (rec ci2) ca2 ci1 ci2
+    where rec = recrCircuito casoCaja casoSerie casoParalelo
+
