@@ -31,3 +31,10 @@ recrCircuito casoCaja casoSerie casoParalelo c = case c of
     Paralelo ca1 ci1 ci2 ca2 -> casoParalelo ca1 (rec ci1) (rec ci2) ca2 ci1 ci2
     where rec = recrCircuito casoCaja casoSerie casoParalelo
 
+-- Ejercicio 2
+foldCircuito :: (Caja -> b) -> (b -> b -> b) -> (Caja -> b -> b -> Caja -> b) -> Circuito -> b
+foldCircuito casoCaja casoSerie casoParalelo = recrCircuito
+    casoCaja
+    (\c1 c2 _ _ -> casoSerie c1 c2)
+    (\ca1 ci1 ci2 ca2 _ _ -> casoParalelo ca1 ci1 ci2 ca2)
+
