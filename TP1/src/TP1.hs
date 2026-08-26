@@ -1,0 +1,149 @@
+module TP1 where
+
+data Caja = Bombilla Bool | Nada
+              deriving Eq
+instance Show Caja where
+    show = showDeCaja
+
+showDeCaja :: Caja -> String 
+showDeCaja (Bombilla True) = "💡"
+showDeCaja (Bombilla False) = "⚪️"
+showDeCaja (Nada) = "🛑"
+
+data Circuito = Caja     Caja
+              | Serie    Circuito Circuito
+              | Paralelo Caja Circuito Circuito Caja
+                  deriving Eq
+instance Show Circuito where
+    show = showDeCircuito
+
+showDeCircuito :: Circuito -> String
+showDeCircuito (Caja caja) = showDeCaja caja
+showDeCircuito (Serie circuitoInicial circuitoFinal) =
+  (showDeCircuito circuitoInicial) ++ "-" ++ (showDeCircuito circuitoFinal)
+showDeCircuito (Paralelo cajaEntrada circuitoIzquierdo circuitoDerecho cajaSalida) =
+  (showDeCaja cajaEntrada) ++
+  "{" ++ (showDeCircuito circuitoIzquierdo) ++ "}" ++
+  "{" ++ (showDeCircuito circuitoDerecho) ++ "}" ++
+  (showDeCaja cajaSalida)
+
+showDeCircuitoConEstructura :: Circuito -> String
+showDeCircuitoConEstructura (Caja caja) = showDeCaja caja
+showDeCircuitoConEstructura (Serie circuitoInicial circuitoFinal) = "(" ++
+  (showDeCircuitoConEstructura circuitoInicial) ++
+    "-" ++
+  (showDeCircuitoConEstructura circuitoFinal) ++ ")"
+showDeCircuitoConEstructura (Paralelo cajaEntrada circuitoIzquierdo circuitoDerecho cajaSalida) =
+  (showDeCaja cajaEntrada) ++
+  "{" ++ (showDeCircuitoConEstructura circuitoIzquierdo) ++ "}" ++
+  "{" ++ (showDeCircuitoConEstructura circuitoDerecho) ++ "}" ++
+  (showDeCaja cajaSalida)
+
+on  = Bombilla True
+off = Bombilla False
+
+cajaOn   = Caja on
+cajaOff  = Caja off
+cajaNada = Caja Nada
+
+-- 1: recCircuito
+
+recrCircuito :: (Caja -> b) -> (b -> b -> Circuito -> Circuito -> b) -> (Caja -> b -> b -> Caja -> Circuito -> Circuito -> b) -> Circuito -> b
+recrCircuito casoCaja casoSerie casoParalelo c = case c of
+    Caja x -> casoCaja x
+    Serie c1 c2 -> casoSerie (rec c1) (rec c2) c1 c2
+    Paralelo ca1 ci1 ci2 ca2 -> casoParalelo ca1 (rec ci1) (rec ci2) ca2 ci1 ci2
+    where rec = recrCircuito casoCaja casoSerie casoParalelo
+
+-- 2: foldCircuito
+
+foldCircuito :: (Caja -> b) -> (b -> b -> b) -> (Caja -> b -> b -> Caja -> b) -> Circuito -> b
+foldCircuito casoCaja casoSerie casoParalelo = recrCircuito
+    casoCaja
+    (\c1 c2 _ _ -> casoSerie c1 c2)
+    (\ca1 ci1 ci2 ca2 _ _ -> casoParalelo ca1 ci1 ci2 ca2)
+
+-- 3 invertido
+
+invertido :: Circuito -> Circuito
+invertido = foldCircuito
+    Caja
+    (\c1 c2 -> Serie c2 c1)
+    (\ca1 ci1 ci2 ca2 -> Paralelo ca2 ci2 ci1 ca1)
+
+-- 4: hayCaminoIluminado
+
+hayCaminoIluminado :: Circuito -> Bool
+hayCaminoIluminado = foldCircuito
+    estaEncendida
+    (\c1 c2 -> c1 && c2)
+    (\ca1 ci1 ci2 ca2 -> estaEncendida ca1 && estaEncendida ca2 && (ci1 || ci2))
+
+estaEncendida :: Caja -> Bool
+estaEncendida c = case c of
+    Bombilla True -> True
+    _ -> False
+
+-- 5: cantidadPrendidas
+
+cantidadPrendidas :: Circuito -> Int
+cantidadPrendidas = foldCircuito
+    (\c -> if estaEncendida c then 1 else 0)
+    (\c1 c2 -> c1 + c2)
+    (\ca1 ci1 ci2 ca2 -> ci1 + ci2 + (prendidasEnParDeCajas ca1 ca2))
+
+prendidasEnParDeCajas :: Caja -> Caja -> Int
+prendidasEnParDeCajas c1 c2 = if estaEncendida c1 && estaEncendida c2 then 2
+                        else if estaEncendida c1 && not (estaEncendida c2) then 1
+                        else if not (estaEncendida c1) && estaEncendida c2 then 1
+                        else 0
+
+-- 6: cajasDeCircuito
+
+cajasDeCircuito :: Circuito -> [Caja]
+cajasDeCircuito = foldCircuito
+    (\c -> [c])
+    (\c1 c2 -> c1 ++ c2)
+    (\ca1 ci1 ci2 ca2 -> [ca1] ++ ci1 ++ ci2 ++ [ca2])
+
+-- 7: esCircuitoProlijo
+
+esCircuitoProlijo = undefined -- TODO: COMPLETAR
+
+-- 8: circuitoEmprolijado
+
+circuitoEmprolijado = undefined -- TODO: COMPLETAR
+
+-- 9: tienenLaMismaEstructura 
+
+tienenLaMismaEstructura = undefined -- TODO: COMPLETAR
+
+-- 10: subCircuitoMásResistente
+
+subCircuitoMásResistente = undefined -- TODO: COMPLETAR
+
+{-- 11: Demostrar: alternado . alternado = id
+
+alternado :: Circuito -> Circuito
+{AC} alternado (Caja caja) = Caja (cajaAlternada caja)
+{AS} alternado (Serie ci cf) = Serie (alternado ci) (alternado cf)
+{AP} alternado (Paralelo ce ci cd cs) =
+       Paralelo (cajaAlternada ce) (alternado ci) (alternado cd) (cajaAlternada cs)
+
+cajaAlternada :: Caja -> Caja
+{CAN} cajaAlternada Nada = Nada
+{CAB} cajaAlternada Bombilla booleano = Bombilla not booleano
+
+(.) :: (b -> c) -> (a -> b) -> a -> c
+{C} (f . f) x = f (f x)
+
+id :: a -> a
+{I} id x = x
+
+not :: Bool -> Bool
+{NT} not True = False
+{NF} not False = True
+
+-- TODO: COMPLETAR
+
+--}
