@@ -84,6 +84,11 @@ estaEncendida c = case c of
     Bombilla True -> True
     _ -> False
 
+hayCaminoIluminado2 :: Circuito -> Bool
+hayCaminoIluminado2 = recrCircuito (== on) 
+                                   (\recc1 recc2 _ _ -> recc1 || recc2) 
+                                   (\b1 recc1 recc2 b2 _ _ -> (b1 == on) && (b2 == on) && (recc1 || recc2))
+
 -- 5: cantidadPrendidas
 
 cantidadPrendidas :: Circuito -> Int
@@ -98,6 +103,14 @@ prendidasEnParDeCajas c1 c2 = if estaEncendida c1 && estaEncendida c2 then 2
                         else if not (estaEncendida c1) && estaEncendida c2 then 1
                         else 0
 
+cantidadPrendidas2 :: Circuito -> Int 
+cantidadPrendidas2 = foldCircuito flagPrendida
+                                  (\c1 c2 -> c1 + c2) 
+                                  (\b1 c1 c2 b2 -> flagPrendida b1 + c1 + c2 + flagPrendida b2)
+
+flagPrendida :: Caja -> Int
+flagPrendida caja = if caja == on then 1 else 0
+
 -- 6: cajasDeCircuito
 
 cajasDeCircuito :: Circuito -> [Caja]
@@ -108,15 +121,40 @@ cajasDeCircuito = foldCircuito
 
 -- 7: esCircuitoProlijo
 
-esCircuitoProlijo = undefined -- TODO: COMPLETAR
+esCircuitoProlijo :: Circuito -> Bool
+esCircuitoProlijo = recrCircuito (const True) 
+                                 (\recc1 recc2 _ c2 -> not (esSerie c2) && recc1 && recc2) 
+                                 (\_ recc1 recc2 _ _ _ -> recc1 && recc2)
+
+esSerie :: Circuito -> Bool
+esSerie c = case c of
+        Serie _ _ -> True
+        _ -> False
 
 -- 8: circuitoEmprolijado
 
-circuitoEmprolijado = undefined -- TODO: COMPLETAR
+circuitoEmprolijado :: Circuito -> Circuito
+circuitoEmprolijado = foldCircuito Caja 
+                                   (\c1 c2 -> if not (esSerie c1) && esSerie c2 then Serie c2 c1 else Serie c1 c2)
+                                   Paralelo
 
 -- 9: tienenLaMismaEstructura 
 
-tienenLaMismaEstructura = undefined -- TODO: COMPLETAR
+tienenLaMismaEstructura :: Circuito -> Circuito -> Bool
+tienenLaMismaEstructura c1 = foldCircuito (\_ bc2 -> esCaja bc2) 
+                                          (\_ _ cc2 -> esSerie cc2) 
+                                          (\_ _ _ _ cc2 -> esParalelo cc2) 
+                                          c1
+
+esCaja :: Circuito -> Bool
+esCaja c = case c of
+        Caja _ -> True
+        _ -> False
+
+esParalelo :: Circuito -> Bool
+esParalelo c = case c of
+        Paralelo _ _ _ _ -> True
+        _ -> False
 
 -- 10: subCircuitoMásResistente
 
