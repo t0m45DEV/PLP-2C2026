@@ -86,7 +86,7 @@ estaEncendida c = case c of
 
 hayCaminoIluminado2 :: Circuito -> Bool
 hayCaminoIluminado2 = recrCircuito (== on) 
-                                   (\recc1 recc2 _ _ -> recc1 || recc2) 
+                                   (\recc1 recc2 _ _ -> recc1 && recc2) 
                                    (\b1 recc1 recc2 b2 _ _ -> (b1 == on) && (b2 == on) && (recc1 || recc2))
 
 -- 5: cantidadPrendidas
@@ -141,20 +141,25 @@ circuitoEmprolijado = foldCircuito Caja
 -- 9: tienenLaMismaEstructura 
 
 tienenLaMismaEstructura :: Circuito -> Circuito -> Bool
-tienenLaMismaEstructura c1 = foldCircuito (\_ bc2 -> esCaja bc2) 
-                                          (\_ _ cc2 -> esSerie cc2) 
-                                          (\_ _ _ _ cc2 -> esParalelo cc2) 
-                                          c1
+tienenLaMismaEstructura = foldCircuito (\_ bc2 -> esCaja bc2) 
+                                       (\rc11 rc12 cc2 -> case cc2 of
+                                                        Serie rc21 rc22 -> (rc11 rc21) && (rc12 rc22)
+                                                        _ -> False) 
+                                       (\_ rc11 rc12 _ cc2 -> case cc2 of
+                                                        Paralelo _ rc21 rc22 _ -> (rc11 rc21) && (rc12 rc22)
+                                                        _ -> False) 
 
 esCaja :: Circuito -> Bool
 esCaja c = case c of
         Caja _ -> True
         _ -> False
 
-esParalelo :: Circuito -> Bool
-esParalelo c = case c of
-        Paralelo _ _ _ _ -> True
-        _ -> False
+circuito1Inv = Serie cajaOn (Paralelo on (Paralelo Nada cajaOff cajaOn Nada) (Paralelo on cajaOn cajaNada off) on)
+circuito1 = Serie (Paralelo on (Paralelo off cajaNada cajaOn on) (Paralelo Nada cajaOn cajaOff Nada) on) cajaOn
+circuito2 = Serie (Paralelo off (Paralelo on cajaNada cajaOn on) (Paralelo on cajaOn cajaOff on) on) cajaOn
+circuito3 = Serie cajaOn (Paralelo off (Paralelo off cajaNada cajaOn off) (Paralelo off cajaOn cajaOff Nada) on)               
+circuito4 = cajaOn
+circuito5 = Serie cajaOn cajaOff       
 
 -- 10: subCircuitoMásResistente
 
