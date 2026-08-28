@@ -141,13 +141,13 @@ circuitoEmprolijado = foldCircuito Caja
 -- 9: tienenLaMismaEstructura 
 
 tienenLaMismaEstructura :: Circuito -> Circuito -> Bool
-tienenLaMismaEstructura = foldCircuito (\_ bc2 -> esCaja bc2) 
-                                       (\rc11 rc12 cc2 -> case cc2 of
-                                                        Serie rc21 rc22 -> (rc11 rc21) && (rc12 rc22)
-                                                        _ -> False) 
-                                       (\_ rc11 rc12 _ cc2 -> case cc2 of
-                                                        Paralelo _ rc21 rc22 _ -> (rc11 rc21) && (rc12 rc22)
-                                                        _ -> False) 
+tienenLaMismaEstructura = foldCircuito (\_ c2 -> esCaja c2)
+                                       (\rcir1i rcir1d cir2 -> case cir2 of
+                                                        Serie cir2i cir2d -> (rcir1i cir2i) && (rcir1d cir2d)
+                                                        _ -> False)
+                                       (\_ rcir1i rcir1d _ cir2 -> case cir2 of
+                                                        Paralelo _ cir2i cir2d _ -> (rcir1i cir2i) && (rcir1d cir2d)
+                                                        _ -> False)
 
 esCaja :: Circuito -> Bool
 esCaja c = case c of
