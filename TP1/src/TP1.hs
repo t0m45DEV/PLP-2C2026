@@ -15,7 +15,7 @@ data Circuito = Caja     Caja
               | Paralelo Caja Circuito Circuito Caja
                   deriving Eq
 instance Show Circuito where
-    show = showDeCircuito
+    show = showDeCircuitoConEstructura
 
 showDeCircuito :: Circuito -> String
 showDeCircuito (Caja caja) = showDeCaja caja
@@ -163,5 +163,19 @@ circuito5 = Serie cajaOn cajaOff
 
 -- 10: subCircuitoMásResistente
 
-subCircuitoMásResistente = undefined -- TODO: COMPLETAR
+subCircuitoMásResistente :: Circuito -> Circuito
+subCircuitoMásResistente = foldCircuito Caja
+                                        (\i d -> if resistenciaCircuito i > resistenciaCircuito d then i else d)
+                                        maximaResistencia
+
+maximaResistencia :: Caja -> Circuito -> Circuito -> Caja -> Circuito
+maximaResistencia c1 c2 c3 c4 | resistenciaCircuito ca1 > resistenciaCircuito c2 && resistenciaCircuito ca1 > resistenciaCircuito c3 && resistenciaCircuito ca1 > resistenciaCircuito ca4 = ca1
+                              | resistenciaCircuito c2 > resistenciaCircuito ca1 && resistenciaCircuito c2 > resistenciaCircuito c3 && resistenciaCircuito c2 > resistenciaCircuito ca4 = c2
+                              | resistenciaCircuito c3 > resistenciaCircuito ca1 && resistenciaCircuito c3 > resistenciaCircuito c2 && resistenciaCircuito c3 > resistenciaCircuito ca4 = c3
+                              | otherwise = ca4
+                              where ca1 = Caja c1
+                                    ca4 = Caja c4
+
+resistenciaCircuito :: Circuito -> Float
+resistenciaCircuito _ = 0
 
