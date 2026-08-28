@@ -165,28 +165,3 @@ circuito5 = Serie cajaOn cajaOff
 
 subCircuitoMásResistente = undefined -- TODO: COMPLETAR
 
-{-- 11: Demostrar: alternado . alternado = id
-
-alternado :: Circuito -> Circuito
-{AC} alternado (Caja caja) = Caja (cajaAlternada caja)
-{AS} alternado (Serie ci cf) = Serie (alternado ci) (alternado cf)
-{AP} alternado (Paralelo ce ci cd cs) =
-       Paralelo (cajaAlternada ce) (alternado ci) (alternado cd) (cajaAlternada cs)
-
-cajaAlternada :: Caja -> Caja
-{CAN} cajaAlternada Nada = Nada
-{CAB} cajaAlternada Bombilla booleano = Bombilla not booleano
-
-(.) :: (b -> c) -> (a -> b) -> a -> c
-{C} (f . f) x = f (f x)
-
-id :: a -> a
-{I} id x = x
-
-not :: Bool -> Bool
-{NT} not True = False
-{NF} not False = True
-
--- TODO: COMPLETAR
-
---}
