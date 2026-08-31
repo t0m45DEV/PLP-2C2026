@@ -1,0 +1,118 @@
+El predicado a corresponde a una demostración por inducción estructural, ya que podriamos reescribirlo de la siguiente forma:
+
+$$\paraTodo{c}{\circuito}{\alternado \composition \alternado \; c = \textito{id} \; c}$$
+
+Para empezar, podemos utilizar las distintas definciones que el enunciado menciona para reducir esta expresión.
+
+El lado izquierdo del predicado se reduce a:
+
+\begin{equation*}
+    \begin{aligned}
+        \igualesPor{\alternado \composition \alternado \; c}{\alternado \; (\alternado \; c)}{por \formula{C}}
+    \end{aligned}
+\end{equation*}
+
+El lado derecho del predicado pasa a ser simplemente $c$, pues:
+
+\begin{equation*}
+    \begin{aligned}
+        \igualesPor{\textito{id} \; c}{c}{por \formula{I}}
+    \end{aligned}
+\end{equation*}
+
+Entonces, lo que queremos demostrar se reduce a:
+
+$$\paraTodo{c}{\circuito}{\alternado \; (\alternado \; c) = c}$$
+
+Para continuar reduciendo la expresión, debemos usar todos los posibles constructores de \circuito. De esa forma, vamos a tener tres nuevos predicados, que son:
+
+\begin{equation*}
+    \paraTodo{c}{\caja}{\alternado \; (\alternado \; (\caja \; c)) = \caja \; c}
+\end{equation*}
+
+\begin{equation*}
+    \paraTodo{c1, c2}{\circuito}{\alternado \; (\alternado \; (\serie{c1}{c2})) = \serie{c1}{c2}}
+\end{equation*}
+
+\begin{equation*}
+    \paraTodo{ca1, ca2}{\caja}{\paraTodo{ci1, ci2}{\circuito}{\alternado \; (\alternado \; (\paralelo{ca1}{ci1}{ci2}{ca2})) = \paralelo{ca1}{ci1}{ci2}{ca2}}}
+\end{equation*}
+
+De ahora en adelante, vamos a dejar de escribir los cuantificadores por comodidad, pero de manera implicita siempre estan ahi.
+
+Ahora veamos caso por caso.
+
+\subsubsection*{Caso base}
+
+Queremos ver que:
+
+\begin{equation*}
+    \paraTodo{c}{\caja}{\alternado \; (\alternado \; (\caja \; c)) = \caja \; c}
+\end{equation*}
+
+Vamos a trabajar con el lado izquierdo de la expresión.
+
+\begin{equation*}
+    \begin{aligned}
+        \igualesPor{\alternado \; (\alternado \; (\caja \; c))}{\alternado \; (\caja \; (\cajaAlternada \; c))}{por \formula{AC}}
+    \end{aligned}
+\end{equation*}
+
+Ahora bien, si vemos los contructores de $\caja$ tenemos que puede ser tanto $\nada$ como una $\bombilla{b}$, con algun $b$ de tipo $\bool$. Con esto en mente, volvemos a separar en casos.
+
+Si suponemos que $c = \nada$, entonces nos queda:
+
+\begin{equation*}
+    \begin{aligned}
+        \igualesPor{\alternado \; (\caja \; (\cajaAlternada \; \nada))}{\alternado \; (\caja \; \nada)}{por \formula{CAN}} \\
+        \igualesPor{}{\caja \; (\cajaAlternada \; \nada)}{por \formula{AC}} \\
+        \igualesPor{}{\caja \; \nada}{por \formula{CAN}} \\
+    \end{aligned}
+\end{equation*}
+
+Si retomamos el lado derecho de la expresión reemplazando $c$ por $Nada$, nos queda:
+
+$$\caja \; \nada = \caja \; \nada$$
+
+Que es, evidentemente, verdadero.
+
+Veamos los casos de $\bombilla{b}$.
+
+\begin{equation*}
+    \begin{aligned}
+        \igualesPor{\alternado \; (\caja \; (\cajaAlternada \; \bombilla{b}))}{\alternado \; (\caja \; (\bombilla{(\notfunc \; b)}))}{por \formula{CAN}} \\
+    \end{aligned}
+\end{equation*}
+
+Y al otro lado de la expresión tenemos:
+
+$$\caja \; \bombilla{b}$$
+
+Para resolver ese $\notfunc$ debemos volver a separar en casos (les juro que es la ultima vez), y ver que pasa con $b$. Como $b$ es de tipo $\bool$ sabemos que puede ser tanto $\true$ como $\false$. Otra vez, probemos uno por uno. Supongamos, primero, que $b = \true$.
+
+\begin{equation*}
+    \begin{aligned}
+        \igualesPor{\alternado \; (\caja \; (\bombilla{\notfunc \; \true}))}{\alternado \; (\caja \; \bombilla{\false})}{por \formula{NT}} \\
+        \igualesPor{}{\cajaAlternada \; (\caja \; \bombilla{\false})}{por \formula{AC}} \\
+        \igualesPor{}{\caja \; (\bombilla{\notfunc \; \false})}{por \formula{CAB}} \\
+        \igualesPor{}{\caja \; \bombilla{\true}}{por \formula{NF}} \\
+    \end{aligned}
+\end{equation*}
+
+Esto, visiblemente, es lo mismo que teniamos del otro lado de la expresión.
+
+El caso de $b = \false$ es analogo, como se puede ver a continuación:
+
+\begin{equation*}
+    \begin{aligned}
+        \igualesPor{\alternado \; (\caja \; (\bombilla{\notfunc \; \false}))}{\alternado \; (\caja \; \bombilla{\true})}{por \formula{NF}} \\
+        \igualesPor{}{\cajaAlternada \; (\caja \; \bombilla{\true})}{por \formula{AC}} \\
+        \igualesPor{}{\caja \; (\bombilla{\notfunc \; \true})}{por \formula{CAB}} \\
+        \igualesPor{}{\caja \; \bombilla{\false}}{por \formula{NT}} \\
+    \end{aligned}
+\end{equation*}
+
+Con todo esto, el caso base de $\caja$ queda demostrado.
+
+\subsubsection*{Paso inductivo}
+
