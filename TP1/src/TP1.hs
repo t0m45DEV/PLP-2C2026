@@ -163,19 +163,29 @@ circuito5 = Serie cajaOn cajaOff
 
 -- 10: subCircuitoMásResistente
 
-subCircuitoMásResistente :: Circuito -> Circuito
-subCircuitoMásResistente = foldCircuito Caja
-                                        (\i d -> if resistenciaCircuito i > resistenciaCircuito d then i else d)
-                                        maximaResistencia
+subCircuitoMasResistente :: Circuito -> Circuito
+subCircuitoMasResistente = recrCircuito Caja
+                                        (\recc1 recc2 c1 c2 -> circuitoMasResistente (Serie c1 c2) recc1 recc2)
+                                        (\ca1 recc1 recc2 ca2 c1 c2 -> circuitoMasResistente (Paralelo ca1 c1 c2 ca2) recc1 recc2)
 
-maximaResistencia :: Caja -> Circuito -> Circuito -> Caja -> Circuito
-maximaResistencia c1 c2 c3 c4 | resistenciaCircuito ca1 > resistenciaCircuito c2 && resistenciaCircuito ca1 > resistenciaCircuito c3 && resistenciaCircuito ca1 > resistenciaCircuito ca4 = ca1
-                              | resistenciaCircuito c2 > resistenciaCircuito ca1 && resistenciaCircuito c2 > resistenciaCircuito c3 && resistenciaCircuito c2 > resistenciaCircuito ca4 = c2
-                              | resistenciaCircuito c3 > resistenciaCircuito ca1 && resistenciaCircuito c3 > resistenciaCircuito c2 && resistenciaCircuito c3 > resistenciaCircuito ca4 = c3
-                              | otherwise = ca4
-                              where ca1 = Caja c1
-                                    ca4 = Caja c4
+circuitoMasResistente2 :: [Circuito] -> Circuito
+circuitoMasResistente2 [c] = c
+circuitoMasResistente2 (c1:c2:cs) = if resistenciaCircuito c1 > resistenciaCircuito c2 then circuitoMasResistente2 (c1:cs) else circuitoMasResistente2 (c2:cs)
+
+-- circuitoMasResistente3 :: [Circuito] -> Circuito
+-- circuitoMasResistente3 = undefined
+
+circuitoMasResistente :: Circuito -> Circuito -> Circuito -> Circuito
+circuitoMasResistente c1 c2 c3 | resistenciaCircuito c1 > resistenciaCircuito c2 && resistenciaCircuito c1 > resistenciaCircuito c3 = c1
+                               | resistenciaCircuito c2 > resistenciaCircuito c1 && resistenciaCircuito c2 > resistenciaCircuito c3 = c2
+                               | resistenciaCircuito c3 > resistenciaCircuito c1 && resistenciaCircuito c3 > resistenciaCircuito c2 = c3
+
 
 resistenciaCircuito :: Circuito -> Float
-resistenciaCircuito _ = 0
+resistenciaCircuito (Caja b) =  case b of 
+                        Bombilla True -> 1
+                        Bombilla False -> 0
+                        Nada -> 100
+resistenciaCircuito (Serie c1 c2) = resistenciaCircuito c1 + resistenciaCircuito c2 
+resistenciaCircuito (Paralelo ca1 c1 c2 ca2) = (resistenciaCircuito c1 + resistenciaCircuito c2) / 2
 
