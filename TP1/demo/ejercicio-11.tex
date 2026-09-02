@@ -70,14 +70,14 @@ Con esto, llegamos a algo que es identico al lado derecho de la expresión con l
 
 \subsubsection*{Paso inductivo}
 
-Ahora tenemos dos posibles casos. Por un lado, $c = \serie{c1}{c2}$, y por otro $c = \paralelo{ca1}{ci1}{ci2}{ca2}$.
+Ahora tenemos dos posibles casos. Por un lado, $c = \serie{c_1}{c_2}$, y por otro $c = \paralelo{ca_1}{ci_1}{ci_2}{ca_2}$.
 
-Vamos con el primero. Si asumimos que $c = \serie{c1}{c2}$, debemos también asumir que el predicado vale tanto para $c1$ como para $c2$. Mas especificamente:
+Vamos con el primero. Si asumimos que $c = \serie{c_1}{c_2}$, debemos también asumir que el predicado vale tanto para $c_1$ como para $c_2$. Mas especificamente:
 
 \begin{equation*}
     \begin{aligned}
-        \igualesPor{\alternado \; (\alternado \; c1)}{c1 \text{ al que llamaremos \formula{HI$_1$}}}{} \\
-        \igualesPor{\alternado \; (\alternado \; c2)}{c2 \text{ al que llamaremos \formula{HI$_2$}}}{} \\
+        \igualesPor{\alternado \; (\alternado \; c_1)}{c_1 \text{ al que llamaremos \formula{HI$_1$}}}{} \\
+        \igualesPor{\alternado \; (\alternado \; c_2)}{c_2 \text{ al que llamaremos \formula{HI$_2$}}}{} \\
     \end{aligned}
 \end{equation*}
 
@@ -85,21 +85,21 @@ Con todo esto, decimos que:
 
 \begin{equation*}
     \begin{aligned}
-        \igualesPor{\alternado \; (\alternado \; (\serie{c1}{c2}))}{\alternado \; (\serie{(\alternado \; c1)}{(\alternado \; c2)})}{por \formula{AS}} \\
-        \igualesPor{}{\serie{(\alternado \; (\alternado \; c1))}{(\alternado \; (\alternado \; c2))}}{por \formula{AS}} \\
-        \igualesPor{}{\serie{c1}{(\alternado \; (\alternado \; c2))}}{por \formula{HI$_1$}} \\
-        \igualesPor{}{\serie{c1}{c2}}{por \formula{HI$_2$}} \\
+        \igualesPor{\alternado \; (\alternado \; (\serie{c_1}{c_2}))}{\alternado \; (\serie{(\alternado \; c_1)}{(\alternado \; c_2)})}{por \formula{AS}} \\
+        \igualesPor{}{\serie{(\alternado \; (\alternado \; c_1))}{(\alternado \; (\alternado \; c_2))}}{por \formula{AS}} \\
+        \igualesPor{}{\serie{c_1}{(\alternado \; (\alternado \; c_2))}}{por \formula{HI$_1$}} \\
+        \igualesPor{}{\serie{c_1}{c_2}}{por \formula{HI$_2$}} \\
     \end{aligned}
 \end{equation*}
 
 Esto es, evidentemente, identico a $c$, por lo que terminamos.
 
-Por ultimo, el ultimo paso, el caso de $c = \paralelo{ca1}{ci1}{ci2}{ca2}$, en el que vamos a tomar como hipotesis inductivas que:
+Por ultimo, el ultimo paso, el caso de $c = \paralelo{ca_1}{ci_1}{ci_2}{ca_2}$, en el que vamos a tomar como hipotesis inductivas que:
 
 \begin{equation*}
     \begin{aligned}
-        \igualesPor{\alternado \; (\alternado \; ci1)}{ci1 \text{ a la que llamaremos \formula{HI$_{ci1}$}}}{} \\
-        \igualesPor{\alternado \; (\alternado \; ci2)}{ci2 \text{ a la que llamaremos \formula{HI$_{ci2}$}}}{} \\
+        \igualesPor{\alternado \; (\alternado \; ci_1)}{ci_1 \text{ a la que llamaremos \formula{HI$_{ci_1}$}}}{} \\
+        \igualesPor{\alternado \; (\alternado \; ci_2)}{ci_2 \text{ a la que llamaremos \formula{HI$_{ci_2}$}}}{} \\
     \end{aligned}
 \end{equation*}
 
@@ -108,12 +108,12 @@ Con todo esto armado, podemos arrancar. Tenemos que:
 \begin{scriptsize}
     \begin{equation*}
         \begin{aligned}
-            \igualesPor{\alternado \; (\alternado \; (\paralelo{ca1}{ci1}{ci2}{ca2}))}{}{por \formula{AP}} \\
-            \igualesPor{\alternado \; (\paralelo{(\cajaAlternada \; ca1)}{(\alternado \; ci1)}{(\alternado \; ci2)}{(\cajaAlternada \; ca2)})}{}{por \formula{AP}} \\
-            \igualesPor{\paralelo{(\cajaAlternada \; (\cajaAlternada \; ca1))}{(\alternado \; (\alternado \; ci1))}{(\alternado \; (\alternado \; ci2))}{(\cajaAlternada \; (\cajaAlternada \; ca2))}}{}{por \formula{HI$_{ci1}$}} \\
-            \igualesPor{\paralelo{(\cajaAlternada \; (\cajaAlternada \; ca1))}{ci1}{(\alternado \; (\alternado \; ci2))}{(\cajaAlternada \; (\cajaAlternada \; ca2))}}{}{por \formula{HI$_{ci2}$}} \\
-            \igualesPor{\paralelo{ca1}{ci1}{ci2}{(\cajaAlternada \; (\cajaAlternada \; ca2))}}{}{por \formula{LCA}} \\
-            \igualesPor{\paralelo{ca1}{ci1}{ci2}{ca2}}{}{por \formula{LCA}} \\
+            \igualesPor{\alternado \; (\alternado \; (\paralelo{ca_1}{ci_1}{ci_2}{ca_2}))}{}{por \formula{AP}} \\
+            \igualesPor{\alternado \; (\paralelo{(\cajaAlternada \; ca_1)}{(\alternado \; ci_1)}{(\alternado \; ci_2)}{(\cajaAlternada \; ca_2)})}{}{por \formula{AP}} \\
+            \igualesPor{\paralelo{(\cajaAlternada \; (\cajaAlternada \; ca_1))}{(\alternado \; (\alternado \; ci_1))}{(\alternado \; (\alternado \; ci_2))}{(\cajaAlternada \; (\cajaAlternada \; ca_2))}}{}{por \formula{HI$_{ci_1}$}} \\
+            \igualesPor{\paralelo{(\cajaAlternada \; (\cajaAlternada \; ca_1))}{ci_1}{(\alternado \; (\alternado \; ci_2))}{(\cajaAlternada \; (\cajaAlternada \; ca_2))}}{}{por \formula{HI$_{ci_2}$}} \\
+            \igualesPor{\paralelo{ca_1}{ci_1}{ci_2}{(\cajaAlternada \; (\cajaAlternada \; ca2))}}{}{por \formula{LCA}} \\
+            \igualesPor{\paralelo{ca_1}{ci_1}{ci_2}{ca_2}}{}{por \formula{LCA}} \\
         \end{aligned}
     \end{equation*}
 \end{scriptsize}
