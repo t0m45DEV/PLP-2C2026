@@ -1,0 +1,52 @@
+Queremos ver que, para cualquier $c$ de tipo $\caja$:
+
+$$\cajaAlternada \; (\cajaAlternada \; c) = c$$
+
+Para eso simplemente debemos separar en casos, analizando cada posible valor de $c$. Ahora bien, si vemos los contructores de $\caja$ tenemos que puede ser tanto $\nada$ como una $\bombilla{b}$, con algun $b$ de tipo $\bool$. Con esto en mente, volvemos a separar en casos.
+
+Si suponemos que $c = \nada$, entonces nos queda:
+
+\begin{equation*}
+    \begin{aligned}
+        \igualesPor{\cajaAlternada \; (\cajaAlternada \; \nada)}{\cajaAlternada \; \nada}{por \formula{CAN}} \\
+        \igualesPor{}{\nada}{por \formula{CAN}} \\
+    \end{aligned}
+\end{equation*}
+
+Si retomamos el lado derecho de la expresión reemplazando $c$ por $Nada$, nos queda:
+
+$$\nada = \nada$$
+
+Que es, evidentemente, verdadero.
+
+Veamos los casos de $\bombilla{b}$.
+
+\begin{equation*}
+    \begin{aligned}
+        \igualesPor{\cajaAlternada \; (\cajaAlternada \; (\bombilla{b}))}{\cajaAlternada \; (\bombilla{\notfunc \; b})}{por \formula{CAB}} \\
+        \igualesPor{}{\bombilla{(\notfunc \; (\notfunc \; b))}}{por \formula{CAB}} \\
+    \end{aligned}
+\end{equation*}
+
+Para reducir esos llamados a $\notfunc$ debemos volver a separar en casos (les juro que es la ultima vez), y ver que pasa con $b$. Como $b$ es de tipo $\bool$ sabemos que puede ser tanto $\true$ como $\false$. Otra vez, probemos uno por uno. Supongamos, primero, que $b = \true$, es decir, $c = \bombilla{\true}$.
+
+\begin{equation*}
+    \begin{aligned}
+        \igualesPor{\bombilla{(\notfunc \; (\notfunc \; \true))}}{\bombilla{(\notfunc \; \false)}}{por \formula{NT}} \\
+        \igualesPor{}{\bombilla{\true}}{por \formula{NF}} \\
+    \end{aligned}
+\end{equation*}
+
+Esto, visiblemente, es lo mismo que teniamos del otro lado de la expresión.
+
+El caso de $b = \false$ (donde $c = \bombilla{\false}$) es analogo, como se puede ver a continuación:
+
+\begin{equation*}
+    \begin{aligned}
+        \igualesPor{\bombilla{(\notfunc \; (\notfunc \; \false))}}{\bombilla{(\notfunc \; \true)}}{por \formula{NF}} \\
+        \igualesPor{}{\bombilla{\false}}{por \formula{NT}} \\
+    \end{aligned}
+\end{equation*}
+
+Con todo esto, el lema de la caja alternada queda demostrado.
+
