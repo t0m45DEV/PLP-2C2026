@@ -72,7 +72,16 @@ Con esto, llegamos a algo que es identico al lado derecho de la expresión con l
 
 Ahora tenemos dos posibles casos. Por un lado, $c = \serie{c1}{c2}$, y por otro $c = \paralelo{ca1}{ci1}{ci2}{ca2}$.
 
-Vamos con el primero. Si asumimos que $c = \serie{c1}{c2}$, debemos también asumir que el predicado vale tanto para $c1$ como para $c2$. Es decir, que $\alternado \; (\alternado \; c1) = c1$ y $\alternado \; (\alternado \; c2) = c2$, a las que llamamos $\formula{HI$_1$}$ y $\formula{HI$_2$}$, respectivamente.
+Vamos con el primero. Si asumimos que $c = \serie{c1}{c2}$, debemos también asumir que el predicado vale tanto para $c1$ como para $c2$. Mas especificamente:
+
+\begin{equation*}
+    \begin{aligned}
+        \igualesPor{\alternado \; (\alternado \; c1)}{c1 \text{ al que llamaremos \formula{HI$_1$}}}{} \\
+        \igualesPor{\alternado \; (\alternado \; c2)}{c2 \text{ al que llamaremos \formula{HI$_2$}}}{} \\
+    \end{aligned}
+\end{equation*}
+
+Con todo esto, decimos que:
 
 \begin{equation*}
     \begin{aligned}
