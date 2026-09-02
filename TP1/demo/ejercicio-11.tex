@@ -40,6 +40,12 @@ Para continuar reduciendo la expresión, debemos usar todos los posibles constru
 
 De ahora en adelante, vamos a dejar de escribir los cuantificadores por comodidad, pero de manera implicita siempre estan ahi.
 
+Además vamos a contar con el \textit{lema de la caja alternada}, que dice que para todo $c$ de tipo $\caja$ vale:
+
+$$\cajaAlternada \; (\cajaAlternada \; c) = c \text{ al que llamaremos \formula{LCA}}$$
+
+La demostración de este lema se encuentra al final del documento.
+
 Ahora veamos caso por caso.
 
 \subsubsection*{Caso base}
@@ -54,65 +60,56 @@ Vamos a trabajar con el lado izquierdo de la expresión.
 
 \begin{equation*}
     \begin{aligned}
-        \igualesPor{\alternado \; (\alternado \; (\caja \; c))}{\alternado \; (\caja \; (\cajaAlternada \; c))}{por \formula{AC}}
+        \igualesPor{\alternado \; (\alternado \; (\caja \; c))}{\alternado \; (\caja \; (\cajaAlternada \; c))}{por \formula{AC}} \\
+        \igualesPor{}{\caja \; (\cajaAlternada \; (\cajaAlternada \; c))}{por \formula{AC}} \\
+        \igualesPor{}{\caja \; c}{por \formula{LCA}} \\
     \end{aligned}
 \end{equation*}
 
-Ahora bien, si vemos los contructores de $\caja$ tenemos que puede ser tanto $\nada$ como una $\bombilla{b}$, con algun $b$ de tipo $\bool$. Con esto en mente, volvemos a separar en casos.
-
-Si suponemos que $c = \nada$, entonces nos queda:
-
-\begin{equation*}
-    \begin{aligned}
-        \igualesPor{\alternado \; (\caja \; (\cajaAlternada \; \nada))}{\alternado \; (\caja \; \nada)}{por \formula{CAN}} \\
-        \igualesPor{}{\caja \; (\cajaAlternada \; \nada)}{por \formula{AC}} \\
-        \igualesPor{}{\caja \; \nada}{por \formula{CAN}} \\
-    \end{aligned}
-\end{equation*}
-
-Si retomamos el lado derecho de la expresión reemplazando $c$ por $Nada$, nos queda:
-
-$$\caja \; \nada = \caja \; \nada$$
-
-Que es, evidentemente, verdadero.
-
-Veamos los casos de $\bombilla{b}$.
-
-\begin{equation*}
-    \begin{aligned}
-        \igualesPor{\alternado \; (\caja \; (\cajaAlternada \; \bombilla{b}))}{\alternado \; (\caja \; (\bombilla{(\notfunc \; b)}))}{por \formula{CAN}} \\
-    \end{aligned}
-\end{equation*}
-
-Y al otro lado de la expresión tenemos:
-
-$$\caja \; \bombilla{b}$$
-
-Para resolver ese $\notfunc$ debemos volver a separar en casos (les juro que es la ultima vez), y ver que pasa con $b$. Como $b$ es de tipo $\bool$ sabemos que puede ser tanto $\true$ como $\false$. Otra vez, probemos uno por uno. Supongamos, primero, que $b = \true$.
-
-\begin{equation*}
-    \begin{aligned}
-        \igualesPor{\alternado \; (\caja \; (\bombilla{\notfunc \; \true}))}{\alternado \; (\caja \; \bombilla{\false})}{por \formula{NT}} \\
-        \igualesPor{}{\cajaAlternada \; (\caja \; \bombilla{\false})}{por \formula{AC}} \\
-        \igualesPor{}{\caja \; (\bombilla{\notfunc \; \false})}{por \formula{CAB}} \\
-        \igualesPor{}{\caja \; \bombilla{\true}}{por \formula{NF}} \\
-    \end{aligned}
-\end{equation*}
-
-Esto, visiblemente, es lo mismo que teniamos del otro lado de la expresión.
-
-El caso de $b = \false$ es analogo, como se puede ver a continuación:
-
-\begin{equation*}
-    \begin{aligned}
-        \igualesPor{\alternado \; (\caja \; (\bombilla{\notfunc \; \false}))}{\alternado \; (\caja \; \bombilla{\true})}{por \formula{NF}} \\
-        \igualesPor{}{\cajaAlternada \; (\caja \; \bombilla{\true})}{por \formula{AC}} \\
-        \igualesPor{}{\caja \; (\bombilla{\notfunc \; \true})}{por \formula{CAB}} \\
-        \igualesPor{}{\caja \; \bombilla{\false}}{por \formula{NT}} \\
-    \end{aligned}
-\end{equation*}
-
-Con todo esto, el caso base de $\caja$ queda demostrado.
+Con esto, llegamos a algo que es identico al lado derecho de la expresión con la que empezamos, por lo que el caso base $\caja$ queda demostrado.
 
 \subsubsection*{Paso inductivo}
+
+Ahora tenemos dos posibles casos. Por un lado, $c = \serie{c1}{c2}$, y por otro $c = \paralelo{ca1}{ci1}{ci2}{ca2}$.
+
+Vamos con el primero. Si asumimos que $c = \serie{c1}{c2}$, debemos también asumir que el predicado vale tanto para $c1$ como para $c2$. Es decir, que $\alternado \; (\alternado \; c1) = c1$ y $\alternado \; (\alternado \; c2) = c2$, a las que llamamos $\formula{HI$_1$}$ y $\formula{HI$_2$}$, respectivamente.
+
+\begin{equation*}
+    \begin{aligned}
+        \igualesPor{\alternado \; (\alternado \; (\serie{c1}{c2}))}{\alternado \; (\serie{(\alternado \; c1)}{(\alternado \; c2)})}{por \formula{AS}} \\
+        \igualesPor{}{\serie{(\alternado \; (\alternado \; c1))}{(\alternado \; (\alternado \; c2))}}{por \formula{AS}} \\
+        \igualesPor{}{\serie{c1}{(\alternado \; (\alternado \; c2))}}{por \formula{HI$_1$}} \\
+        \igualesPor{}{\serie{c1}{c2}}{por \formula{HI$_2$}} \\
+    \end{aligned}
+\end{equation*}
+
+Esto es, evidentemente, identico a $c$, por lo que terminamos.
+
+Por ultimo, el ultimo paso, el caso de $c = \paralelo{ca1}{ci1}{ci2}{ca2}$, en el que vamos a tomar como hipotesis inductivas que:
+
+\begin{equation*}
+    \begin{aligned}
+        \igualesPor{\alternado \; (\alternado \; ci1)}{ci1 \text{ a la que llamaremos \formula{HI$_{ci1}$}}}{} \\
+        \igualesPor{\alternado \; (\alternado \; ci2)}{ci2 \text{ a la que llamaremos \formula{HI$_{ci2}$}}}{} \\
+    \end{aligned}
+\end{equation*}
+
+Con todo esto armado, podemos arrancar. Tenemos que:
+
+\begin{scriptsize}
+    \begin{equation*}
+        \begin{aligned}
+            \igualesPor{\alternado \; (\alternado \; (\paralelo{ca1}{ci1}{ci2}{ca2}))}{}{por \formula{AP}} \\
+            \igualesPor{\alternado \; (\paralelo{(\cajaAlternada \; ca1)}{(\alternado \; ci1)}{(\alternado \; ci2)}{(\cajaAlternada \; ca2)})}{}{por \formula{AP}} \\
+            \igualesPor{\paralelo{(\cajaAlternada \; (\cajaAlternada \; ca1))}{(\alternado \; (\alternado \; ci1))}{(\alternado \; (\alternado \; ci2))}{(\cajaAlternada \; (\cajaAlternada \; ca2))}}{}{por \formula{HI$_{ci1}$}} \\
+            \igualesPor{\paralelo{(\cajaAlternada \; (\cajaAlternada \; ca1))}{ci1}{(\alternado \; (\alternado \; ci2))}{(\cajaAlternada \; (\cajaAlternada \; ca2))}}{}{por \formula{HI$_{ci2}$}} \\
+            \igualesPor{\paralelo{ca1}{ci1}{ci2}{(\cajaAlternada \; (\cajaAlternada \; ca2))}}{}{por \formula{LCA}} \\
+            \igualesPor{\paralelo{ca1}{ci1}{ci2}{ca2}}{}{por \formula{LCA}} \\
+        \end{aligned}
+    \end{equation*}
+\end{scriptsize}
+
+Y esto es, finalmente, $c$.
+
+Sin importar el tipo de $c$, siempre llegamos a que ambos lados de la expresión son identicos. Por lo tanto, la propiedad vale para todo $c$ de tipo $\circuito$.
 
