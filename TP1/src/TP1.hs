@@ -165,21 +165,11 @@ circuito5 = Serie cajaOn cajaOff
 
 subCircuitoMasResistente :: Circuito -> Circuito
 subCircuitoMasResistente = recrCircuito Caja
-                                        (\recc1 recc2 c1 c2 -> circuitoMasResistente (Serie c1 c2) recc1 recc2)
-                                        (\ca1 recc1 recc2 ca2 c1 c2 -> circuitoMasResistente (Paralelo ca1 c1 c2 ca2) recc1 recc2)
+                                        (\recc1 recc2 c1 c2 -> circuitoMasResistente [(Serie c1 c2), recc1, recc2])
+                                        (\ca1 recc1 recc2 ca2 c1 c2 -> circuitoMasResistente [(Paralelo ca1 c1 c2 ca2), recc1, recc2])
 
-circuitoMasResistente2 :: [Circuito] -> Circuito
-circuitoMasResistente2 [c] = c
-circuitoMasResistente2 (c1:c2:cs) = if resistenciaCircuito c1 > resistenciaCircuito c2 then circuitoMasResistente2 (c1:cs) else circuitoMasResistente2 (c2:cs)
-
--- circuitoMasResistente3 :: [Circuito] -> Circuito
--- circuitoMasResistente3 = undefined
-
-circuitoMasResistente :: Circuito -> Circuito -> Circuito -> Circuito
-circuitoMasResistente c1 c2 c3 | resistenciaCircuito c1 > resistenciaCircuito c2 && resistenciaCircuito c1 > resistenciaCircuito c3 = c1
-                               | resistenciaCircuito c2 > resistenciaCircuito c1 && resistenciaCircuito c2 > resistenciaCircuito c3 = c2
-                               | resistenciaCircuito c3 > resistenciaCircuito c1 && resistenciaCircuito c3 > resistenciaCircuito c2 = c3
-
+circuitoMasResistente :: [Circuito] -> Circuito
+circuitoMasResistente = foldr1 (\c1 c2 -> if resistenciaCircuito c1 > resistenciaCircuito c2 then c1 else c2)
 
 resistenciaCircuito :: Circuito -> Float
 resistenciaCircuito (Caja b) =  case b of 
@@ -188,4 +178,3 @@ resistenciaCircuito (Caja b) =  case b of
                         Nada -> 100
 resistenciaCircuito (Serie c1 c2) = resistenciaCircuito c1 + resistenciaCircuito c2 
 resistenciaCircuito (Paralelo ca1 c1 c2 ca2) = (resistenciaCircuito c1 + resistenciaCircuito c2) / 2
-
