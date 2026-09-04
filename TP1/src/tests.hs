@@ -4,7 +4,7 @@ import TP1
 -- TESTS
 
 testsInvertido :: Test
-testsInvertido = TestList -- TODO: AGREGAR
+testsInvertido = TestList
   [ "Caja invertida (1)"
     ~: invertido cajaOn
     ~?= cajaOn
@@ -38,7 +38,7 @@ testsInvertido = TestList -- TODO: AGREGAR
   ]
 
 testsHayCaminoIluminado :: Test
-testsHayCaminoIluminado = TestList -- TODO: AGREGAR
+testsHayCaminoIluminado = TestList
   [ "En una caja con bombilla encendida hay camino iluminado"
     ~: hayCaminoIluminado cajaOn
     ~?= True
@@ -54,6 +54,9 @@ testsHayCaminoIluminado = TestList -- TODO: AGREGAR
   , "En un circuito en serie con dos cajas con una bombilla encendida y otra apagada no hay camino iluminado"
     ~: hayCaminoIluminado (Serie cajaOn cajaOff)
     ~?= False
+  , "En un circuito en serie con dos cajas con bombillas apagadas no hay camino iluminado"
+    ~: hayCaminoIluminado (Serie cajaOff cajaOff)
+    ~?= False
   , "En un circuito en paralelo con uno de los dos caminos iluminado hay camino iluminado"
     ~: hayCaminoIluminado (Paralelo on (Paralelo on cajaOn cajaOn on) (Serie cajaOff cajaOff) on)
     ~?= True
@@ -66,7 +69,7 @@ testsHayCaminoIluminado = TestList -- TODO: AGREGAR
   ]
 
 testsCantidadPrendidas :: Test
-testsCantidadPrendidas = TestList -- TODO: AGREGAR
+testsCantidadPrendidas = TestList
   [ "Cantidad prendidas en caja prendida es 1"
     ~: cantidadPrendidas cajaOn
     ~?= 1
@@ -85,10 +88,13 @@ testsCantidadPrendidas = TestList -- TODO: AGREGAR
   , "Cantidad prendidas en circuito serie es 0"
     ~: cantidadPrendidas (Serie (Paralelo off (Paralelo off cajaNada cajaOff off) (Paralelo Nada cajaOff cajaOff Nada) off) cajaNada)
     ~?= 0
+  , "Cantidad prendidas en circuito con todas las bombillas encendidas es 11"
+    ~: cantidadPrendidas (Serie (Paralelo on (Paralelo on cajaOn cajaOn on) (Paralelo on cajaOn cajaOn on) on) cajaOn)
+    ~?= 11
   ]
 
 testsCajasDeCircuito :: Test
-testsCajasDeCircuito = TestList -- TODO: AGREGAR
+testsCajasDeCircuito = TestList
   [ "La lista de cajas de un circuito con una única caja es la lista con esa caja"
     ~: cajasDeCircuito cajaOn
     ~?= [on]
@@ -104,7 +110,7 @@ testsCajasDeCircuito = TestList -- TODO: AGREGAR
   ]
 
 testsEsCircuitoProlijo :: Test
-testsEsCircuitoProlijo = TestList -- TODO: AGREGAR
+testsEsCircuitoProlijo = TestList
   [ "Una caja es prolija"
     ~: esCircuitoProlijo cajaOn
     ~?= True
@@ -126,16 +132,19 @@ testsEsCircuitoProlijo = TestList -- TODO: AGREGAR
   -- "show = showDeCircuitoConEstructura".
   -- De esa forma, podrán distinguir la estructura de los circuitos en serie.
 testsCircuitoEmprolijado :: Test
-testsCircuitoEmprolijado = TestList -- TODO: AGREGAR
+testsCircuitoEmprolijado = TestList
   [ "La versión emprolijada de una caja es la misma caja"
     ~: circuitoEmprolijado cajaOn
     ~?= cajaOn
   ]
 
 testsTienenLaMismaEstructura :: Test
-testsTienenLaMismaEstructura = TestList -- TODO: AGREGAR
+testsTienenLaMismaEstructura = TestList
   [ "Un circuito paralelo con todas las bombillas encendidas tiene la misma estructura que ese circuito pero con las bombillas apagadas"
     ~: tienenLaMismaEstructura (Paralelo on cajaOn cajaOn on) (Paralelo off cajaOff cajaOff off)
+    ~?= True
+  , "Un circuito serie tiene la misma estructura que otra serie pero con las bombillas intercambiadas"
+    ~: tienenLaMismaEstructura (Serie cajaOn cajaOff) (Serie cajaOff cajaOn)
     ~?= True
   , "Un circuito de una caja vacía tiene la misma estructura que un circuito de una caja con una bombilla encendida"
     ~: tienenLaMismaEstructura cajaNada cajaOn
@@ -149,7 +158,7 @@ testsTienenLaMismaEstructura = TestList -- TODO: AGREGAR
   ]
 
 testsSubCircuitoMásResistente :: Test
-testsSubCircuitoMásResistente = TestList -- TODO: AGREGAR
+testsSubCircuitoMásResistente = TestList
   [ "El subcircuito más resistente de un circuito en paralelo con una caja vacía va a ser esa caja vacía"
     ~: subCircuitoMasResistente (Paralelo on (Serie cajaOff cajaNada) cajaOn on)
     ~?= cajaNada
@@ -159,6 +168,9 @@ testsSubCircuitoMásResistente = TestList -- TODO: AGREGAR
   , "El subcircuito más resistente de un circuito en paralelo con dos series es ese circuito en serie de dos series"
     ~: subCircuitoMasResistente (Paralelo off (Serie (Serie cajaOff cajaOn) (Serie cajaOn cajaOn)) cajaOff on)
     ~?= Serie (Serie cajaOff cajaOn) (Serie cajaOn cajaOn)
+  , "El subcircuito más resistente de un circuito en paralelo con una serie y una caja vacia es la caja vacia"
+    ~: subCircuitoMasResistente (Paralelo on (Serie cajaOff cajaOn) (Caja Nada) off)
+    ~?= Caja Nada
   ]
 
 tests :: Test
