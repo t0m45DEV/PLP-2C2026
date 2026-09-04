@@ -2,17 +2,17 @@
 \usepackage{xcolor}
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
-\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codegray}{rgb}{0.9,0.9,0.9}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
 \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
 
 \lstdefinestyle{mystyle}{
-    backgroundcolor=\color{white},
-    commentstyle=\color{black},
-    keywordstyle=\color{black},
+    backgroundcolor=\color{codegray},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codepurple},
     numberstyle=\tiny\color{codegray},
     stringstyle=\color{codepurple},
-    basicstyle=\ttfamily\footnotesize,
+    basicstyle=\selectfont\ttfamily\footnotesize,
     breakatwhitespace=false,
     breaklines=true,
     captionpos=b,
@@ -27,5 +27,5 @@
 
 \lstset{style=mystyle}
 
-\newcommand{\archivoEntero}[1]{\lstinputlisting[basicstyle=\footnotesize,language=Haskell,numbers=none]{#1}}
+\newcommand{\archivoEntero}[1]{\lstinputlisting[backgroundcolor=\color{white}]{#1}}
 \newcommand{\archivoEntre}[3]{\vspace{1pt}\lstinputlisting[basicstyle=\footnotesize,language=Haskell, firstline=#2, lastline=#3]{#1}\vspace{1pt}}
