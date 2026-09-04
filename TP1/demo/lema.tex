@@ -2,7 +2,7 @@ Queremos ver que, para cualquier $c$ de tipo $\caja$:
 
 $$\cajaAlternada \; (\cajaAlternada \; c) = c$$
 
-Para eso simplemente debemos separar en casos, analizando cada posible valor de $c$. Ahora bien, si vemos los contructores de $\caja$ tenemos que puede ser tanto $\nada$ como una $\bombilla{b}$, con algun $b$ de tipo $\bool$. Con esto en mente, volvemos a separar en casos.
+Para eso simplemente debemos separar en casos, analizando cada posible valor de $c$. Ahora bien, si vemos los constructores de $\caja$ tenemos que puede ser tanto $\nada$ como una $\bombilla{b}$, con algún $b$ de tipo $\bool$. Con esto en mente, volvemos a separar en casos.
 
 Si suponemos que $c = \nada$, entonces nos queda:
 
@@ -28,7 +28,7 @@ Veamos los casos de $\bombilla{b}$.
     \end{aligned}
 \end{equation*}
 
-Para reducir esos llamados a $\notfunc$ debemos volver a separar en casos (les juro que es la ultima vez), y ver que pasa con $b$. Como $b$ es de tipo $\bool$ sabemos que puede ser tanto $\true$ como $\false$. Otra vez, probemos uno por uno. Supongamos, primero, que $b = \true$, es decir, $c = \bombilla{\true}$.
+Para reducir esos llamados a $\notfunc$ debemos volver a separar en casos (les juro que es la última vez), y ver qué pasa con $b$. Como $b$ es de tipo $\bool$ sabemos que puede ser tanto $\true$ como $\false$. Otra vez, probemos uno por uno. Supongamos, primero, que $b = \true$, es decir, $c = \bombilla{\true}$.
 
 \begin{equation*}
     \begin{aligned}
@@ -37,9 +37,9 @@ Para reducir esos llamados a $\notfunc$ debemos volver a separar en casos (les j
     \end{aligned}
 \end{equation*}
 
-Esto, visiblemente, es lo mismo que teniamos del otro lado de la expresión.
+Esto, visiblemente, es lo mismo que teníamos del otro lado de la expresión.
 
-El caso de $b = \false$ (donde $c = \bombilla{\false}$) es analogo, como se puede ver a continuación:
+El caso de $b = \false$ (donde $c = \bombilla{\false}$) es análogo, como se puede ver a continuación:
 
 \begin{equation*}
     \begin{aligned}
@@ -49,4 +49,3 @@ El caso de $b = \false$ (donde $c = \bombilla{\false}$) es analogo, como se pued
 \end{equation*}
 
 Con todo esto, el lema de la caja alternada queda demostrado.
-

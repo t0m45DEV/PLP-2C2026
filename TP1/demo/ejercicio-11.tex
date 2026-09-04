@@ -1,8 +1,8 @@
-El predicado a corresponde a una demostración por inducción estructural, ya que podriamos reescribirlo de la siguiente forma:
+El predicado a corresponde a una demostración por inducción estructural, ya que podríamos reescribirlo de la siguiente forma:
 
 $$\paraTodo{c}{\circuito}{\alternado \composition \alternado \; c = \textito{id} \; c}$$
 
-Para empezar, podemos utilizar las distintas definciones que el enunciado menciona para reducir esta expresión.
+Para empezar, podemos utilizar las distintas definiciones que el enunciado menciona para reducir esta expresión.
 
 El lado izquierdo del predicado se reduce a:
 
@@ -34,11 +34,13 @@ Para continuar reduciendo la expresión, debemos usar todos los posibles constru
     \paraTodo{c1, c2}{\circuito}{\alternado \; (\alternado \; (\serie{c1}{c2})) = \serie{c1}{c2}}
 \end{equation*}
 
-\begin{equation*}
-    \paraTodo{ca1, ca2}{\caja}{\paraTodo{ci1, ci2}{\circuito}{\alternado \; (\alternado \; (\paralelo{ca1}{ci1}{ci2}{ca2})) = \paralelo{ca1}{ci1}{ci2}{ca2}}}
-\end{equation*}
+\begin{scriptsize}
+    \begin{equation*}
+        \paraTodo{ca1, ca2}{\caja}{\paraTodo{ci1, ci2}{\circuito}{\alternado \; (\alternado \; (\paralelo{ca1}{ci1}{ci2}{ca2})) = \paralelo{ca1}{ci1}{ci2}{ca2}}}
+    \end{equation*}
+\end{scriptsize}
 
-De ahora en adelante, vamos a dejar de escribir los cuantificadores por comodidad, pero de manera implicita siempre estan ahi.
+De ahora en adelante, vamos a dejar de escribir los cuantificadores por comodidad, pero de manera implícita siempre están ahí.
 
 Además vamos a contar con el \textit{lema de la caja alternada}, que dice que para todo $c$ de tipo $\caja$ vale:
 
@@ -66,13 +68,13 @@ Vamos a trabajar con el lado izquierdo de la expresión.
     \end{aligned}
 \end{equation*}
 
-Con esto, llegamos a algo que es identico al lado derecho de la expresión con la que empezamos, por lo que el caso base $\caja$ queda demostrado.
+Con esto, llegamos a algo que es idéntico al lado derecho de la expresión con la que empezamos, por lo que el caso base $\caja$ queda demostrado.
 
 \subsubsection*{Paso inductivo}
 
 Ahora tenemos dos posibles casos. Por un lado, $c = \serie{c_1}{c_2}$, y por otro $c = \paralelo{ca_1}{ci_1}{ci_2}{ca_2}$.
 
-Vamos con el primero. Si asumimos que $c = \serie{c_1}{c_2}$, debemos también asumir que el predicado vale tanto para $c_1$ como para $c_2$. Mas especificamente:
+Vamos con el primero. Si asumimos que $c = \serie{c_1}{c_2}$, debemos también asumir que el predicado vale tanto para $c_1$ como para $c_2$. Más específicamente:
 
 \begin{equation*}
     \begin{aligned}
@@ -92,9 +94,9 @@ Con todo esto, decimos que:
     \end{aligned}
 \end{equation*}
 
-Esto es, evidentemente, identico a $c$, por lo que terminamos.
+Esto es, evidentemente, idéntico a $c$, por lo que terminamos.
 
-Por ultimo, el ultimo paso, el caso de $c = \paralelo{ca_1}{ci_1}{ci_2}{ca_2}$, en el que vamos a tomar como hipotesis inductivas que:
+Por último, el último paso, el caso de $c = \paralelo{ca_1}{ci_1}{ci_2}{ca_2}$, en el que vamos a tomar como hipótesis inductivas que:
 
 \begin{equation*}
     \begin{aligned}
@@ -124,5 +126,4 @@ Con todo esto armado, podemos arrancar. Tenemos que:
 
 Y esto es, finalmente, $c$.
 
-Sin importar el tipo de $c$, siempre llegamos a que ambos lados de la expresión son identicos. Por lo tanto, la propiedad vale para todo $c$ de tipo $\circuito$.
-
+Sin importar el tipo de $c$, siempre llegamos a que ambos lados de la expresión son idénticos. Por lo tanto, la propiedad vale para todo $c$ de tipo $\circuito$.
