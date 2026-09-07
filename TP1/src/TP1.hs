@@ -63,7 +63,7 @@ foldCircuito casoCaja casoSerie casoParalelo = recrCircuito
     (\c1 c2 _ _ -> casoSerie c1 c2)
     (\ca1 ci1 ci2 ca2 _ _ -> casoParalelo ca1 ci1 ci2 ca2)
 
--- 3 invertido
+-- 3: invertido
 
 invertido :: Circuito -> Circuito
 invertido = foldCircuito
@@ -84,32 +84,16 @@ estaEncendida c = case c of
     Bombilla True -> True
     _ -> False
 
-hayCaminoIluminado2 :: Circuito -> Bool
-hayCaminoIluminado2 = recrCircuito (== on) 
-                                   (\recc1 recc2 _ _ -> recc1 && recc2) 
-                                   (\b1 recc1 recc2 b2 _ _ -> (b1 == on) && (b2 == on) && (recc1 || recc2))
-
 -- 5: cantidadPrendidas
 
 cantidadPrendidas :: Circuito -> Int
-cantidadPrendidas = foldCircuito
-    (\c -> if estaEncendida c then 1 else 0)
-    (\c1 c2 -> c1 + c2)
-    (\ca1 ci1 ci2 ca2 -> ci1 + ci2 + (prendidasEnParDeCajas ca1 ca2))
+cantidadPrendidas = foldCircuito 
+    flagCajaPrendida
+    (\c1 c2 -> c1 + c2) 
+    (\b1 c1 c2 b2 -> flagCajaPrendida b1 + c1 + c2 + flagCajaPrendida b2)
 
-prendidasEnParDeCajas :: Caja -> Caja -> Int
-prendidasEnParDeCajas c1 c2 = if estaEncendida c1 && estaEncendida c2 then 2
-                        else if estaEncendida c1 && not (estaEncendida c2) then 1
-                        else if not (estaEncendida c1) && estaEncendida c2 then 1
-                        else 0
-
-cantidadPrendidas2 :: Circuito -> Int 
-cantidadPrendidas2 = foldCircuito flagPrendida
-                                  (\c1 c2 -> c1 + c2) 
-                                  (\b1 c1 c2 b2 -> flagPrendida b1 + c1 + c2 + flagPrendida b2)
-
-flagPrendida :: Caja -> Int
-flagPrendida caja = if caja == on then 1 else 0
+flagCajaPrendida :: Caja -> Int
+flagCajaPrendida caja = if caja == on then 1 else 0
 
 -- 6: cajasDeCircuito
 
@@ -122,9 +106,10 @@ cajasDeCircuito = foldCircuito
 -- 7: esCircuitoProlijo
 
 esCircuitoProlijo :: Circuito -> Bool
-esCircuitoProlijo = recrCircuito (const True) 
-                                 (\recc1 recc2 _ c2 -> not (esSerie c2) && recc1 && recc2) 
-                                 (\_ recc1 recc2 _ _ _ -> recc1 && recc2)
+esCircuitoProlijo = recrCircuito 
+    (const True) 
+    (\recc1 recc2 _ c2 -> not (esSerie c2) && recc1 && recc2) 
+    (\_ recc1 recc2 _ _ _ -> recc1 && recc2)
 
 esSerie :: Circuito -> Bool
 esSerie c = case c of
@@ -133,43 +118,40 @@ esSerie c = case c of
 
 -- 8: circuitoEmprolijado
 
-circuitoEmprolijado :: Circuito -> Circuito
-circuitoEmprolijado = foldCircuito Caja 
-                                   (\c1 c2 -> if not (esSerie c1) && esSerie c2 then Serie c2 c1 else Serie c1 c2)
-                                   Paralelo
+-- circuitoEmprolijado :: Circuito -> Circuito
+-- circuitoEmprolijado = foldCircuito 
+--     Caja 
+--     (\c1 c2 -> if not (esSerie c1) && esSerie c2 then Serie c2 c1 else Serie c1 c2)
+--     Paralelo
 
--- 9: tienenLaMismaEstructura 
+-- 9: tienenLaMismaEstructura
 
 tienenLaMismaEstructura :: Circuito -> Circuito -> Bool
-tienenLaMismaEstructura = foldCircuito (\_ c2 -> esCaja c2)
-                                       (\rcir1i rcir1d cir2 -> case cir2 of
-                                                        Serie cir2i cir2d -> (rcir1i cir2i) && (rcir1d cir2d)
-                                                        _ -> False)
-                                       (\_ rcir1i rcir1d _ cir2 -> case cir2 of
-                                                        Paralelo _ cir2i cir2d _ -> (rcir1i cir2i) && (rcir1d cir2d)
-                                                        _ -> False)
+tienenLaMismaEstructura = foldCircuito 
+    (\_ c2 -> esCaja c2)
+    (\rcir1i rcir1d cir2 -> case cir2 of
+                    Serie cir2i cir2d -> (rcir1i cir2i) && (rcir1d cir2d)
+                    _ -> False)
+    (\_ rcir1i rcir1d _ cir2 -> case cir2 of
+                    Paralelo _ cir2i cir2d _ -> (rcir1i cir2i) && (rcir1d cir2d)
+                    _ -> False)
 
 esCaja :: Circuito -> Bool
 esCaja c = case c of
         Caja _ -> True
         _ -> False
 
-circuito1Inv = Serie cajaOn (Paralelo on (Paralelo Nada cajaOff cajaOn Nada) (Paralelo on cajaOn cajaNada off) on)
-circuito1 = Serie (Paralelo on (Paralelo off cajaNada cajaOn on) (Paralelo Nada cajaOn cajaOff Nada) on) cajaOn
-circuito2 = Serie (Paralelo off (Paralelo on cajaNada cajaOn on) (Paralelo on cajaOn cajaOff on) on) cajaOn
-circuito3 = Serie cajaOn (Paralelo off (Paralelo off cajaNada cajaOn off) (Paralelo off cajaOn cajaOff Nada) on)               
-circuito4 = cajaOn
-circuito5 = Serie cajaOn cajaOff       
-
 -- 10: subCircuitoMásResistente
 
 subCircuitoMasResistente :: Circuito -> Circuito
-subCircuitoMasResistente = recrCircuito Caja
-                                        (\recc1 recc2 c1 c2 -> circuitoMasResistente [(Serie c1 c2), recc1, recc2])
-                                        (\ca1 recc1 recc2 ca2 c1 c2 -> circuitoMasResistente [(Paralelo ca1 c1 c2 ca2), recc1, recc2])
+subCircuitoMasResistente = recrCircuito 
+    Caja
+    (\recc1 recc2 c1 c2 -> circuitoMasResistente [Serie c1 c2, recc1, recc2])
+    (\ca1 recc1 recc2 ca2 c1 c2 -> circuitoMasResistente [Paralelo ca1 c1 c2 ca2, recc1, recc2])
 
 circuitoMasResistente :: [Circuito] -> Circuito
 circuitoMasResistente = foldr1 (\c1 c2 -> if resistenciaCircuito c1 > resistenciaCircuito c2 then c1 else c2)
+
 
 resistenciaCircuito :: Circuito -> Float
 resistenciaCircuito (Caja b) =  case b of 
@@ -177,4 +159,4 @@ resistenciaCircuito (Caja b) =  case b of
                         Bombilla False -> 0
                         Nada -> 100
 resistenciaCircuito (Serie c1 c2) = resistenciaCircuito c1 + resistenciaCircuito c2 
-resistenciaCircuito (Paralelo ca1 c1 c2 ca2) = (resistenciaCircuito c1 + resistenciaCircuito c2) / 2
+resistenciaCircuito (Paralelo ca1 c1 c2 ca2) = (resistenciaCircuito c1 + resistenciaCircuito c2 + 1) / 2
