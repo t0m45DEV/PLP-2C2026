@@ -19,7 +19,7 @@ todasFilasMiden(K, [X | XS]) :- length(X, K), todasFilasMiden(K, XS).
 
 % tamaño(+Matriz, -Filas, -Columnas)
 % Precondición: esMatriz(Matriz)
-tamaño(_, _, _) :- completar("Ejercicio 2").
+tamaño(M, F, C) :- length(M, F), todasFilasMiden(C, M).
 
 % ----------------
 % Ejercicio 3
