@@ -27,7 +27,7 @@ tamaño(M, F, C) :- length(M, F), todasFilasMiden(C, M).
 
 % coordenadaEnRango(+Matriz, +Coordenada)
 % Precondición: esMatriz(Matriz)
-coordenadaEnRango(_, _) :- completar("Ejercicio 3").
+coordenadaEnRango(M, (X, Y)) :- tamaño(M, F, C), X > 0, X =< F, Y > 0, Y =< C.
 
 % ----------------
 % Observadores de tablero.
