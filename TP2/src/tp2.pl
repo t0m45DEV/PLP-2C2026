@@ -68,7 +68,20 @@ color(T, Color, Coordenada) :-
 
 % tableroConPosiciónLiberada(+Tablero, +Coordenada, -TableroLiberado)
 % Precondición: esMatriz(Tablero), coordenadaEnRango(Tablero, Coordenada), not(libre(Tablero, Coordenada)).
-tableroConPosiciónLiberada(_, _, _) :- completar("Ejercicio 4.a").
+tableroConPosiciónLiberada(T1, C, T2) :- tamaño(T1, Tf, Tc), tamaño(T2, Tf, Tc), tablerosIgualesConExcepcion(T1, T2, C), libre(T2, C).
+
+tablerosIgualesConExcepcion(T1, T2, (X, Y)) :- append(F1p, [F1 | F1s], T1), append(F2p, [F2 | F2s], T2),
+                                                length(F1p, Lf), length(F2p, Lf), Lf is X - 1,
+                                                tablerosIguales(F1p, F2p), tablerosIguales(F1s, F2s),
+                                                append(F1pp, [_ | F1ss], F1), append(F2pp, [_ | F2ss], F2),
+                                                length(F1pp, Lfp), length(F2pp, Lfp), Lfp is Y - 1,
+                                                todosIguales(F1pp, F2pp), todosIguales(F1ss, F2ss).
+
+tablerosIguales([], []).
+tablerosIguales([F | Fs], [Fp | Fsp]) :- todosIguales(F, Fp), tablerosIguales(Fs, Fsp).
+
+todosIguales([], []).
+todosIguales([E | L1], [E | L2]) :- todosIguales(L1, L2).
 
 % ----------------
 % Ejercicio 4.b)
