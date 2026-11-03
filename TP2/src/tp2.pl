@@ -90,7 +90,8 @@ todosIguales([E | L1], [E | L2]) :- todosIguales(L1, L2).
 % tableroConPosicionesLiberadas(+Tablero, +Posiciones, -TableroLiberado)
 % Precondición: esMatriz(Tablero).
 % Precondición: para cada Coordenada en Posiciones: coordenadaEnRango(Tablero, Coordenada), not(libre(Tablero, Coordenada)).
-tableroConPosicionesLiberadas(_, _, _) :- completar("Ejercicio 4.b").
+tableroConPosicionesLiberadas(T, [], T).
+tableroConPosicionesLiberadas(T1, [P | PS], T2) :- tableroConPosiciónLiberada(T1, P, Tp), tableroConPosicionesLiberadas(Tp, PS, T2).
 
 % ----------------
 % Operaciones sobre coordenadas.
