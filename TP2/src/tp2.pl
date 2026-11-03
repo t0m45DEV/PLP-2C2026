@@ -5,7 +5,13 @@
 % ----------------
 
 % esMatriz(+ListaDeListas)
-esMatriz(_) :- completar("Ejercicio 1").
+esMatriz(L) :- todasFilasMiden(_, L).
+
+%  Es verdadero si M contiene unicamente listas de tamaño K
+%
+% todasFilasMiden(+K, ?M)
+todasFilasMiden(K, [X]) :- length(X, K).
+todasFilasMiden(K, [X | XS]) :- length(X, K), todasFilasMiden(K, XS).
 
 % ----------------
 % Ejercicio 2
