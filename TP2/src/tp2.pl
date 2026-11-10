@@ -229,7 +229,35 @@ jugadaPosible(T, (I, J)) :-
 
 % jugarPosición(+TableroInicial, +Coordenada, -TableroResultante)
 % Precondición: esMatriz(TableroInicial), coordenadaEnRango(TableroInicial, Coordenada), libre(TableroInicial, Coordenada).
-jugarPosición(_, _, _) :- completar("Ejercicio 5.a").
+jugarPosición(TI, P, TR) :- ocupadasEnLíneaRecta(TI, P, PO), vecindadesDelMismoColorMasLargas(TI, PO, POC), tableroConPosicionesLiberadas(TI, POC, TR).
+
+% vecindadesDelMismoColorMasLargas(+Tablero, +Vecinos, -VecinosDelMismoColor)
+vecindadesDelMismoColorMasLargas(T, V, R) :- findall(G, vecindadDeMismoColorMasLarga(T, V, G), Gs), noEstaVacia(Gs), append(Gs, R).
+
+% vecindadDeMismoColorMasLarga(+Tablero, +Vecinos, ?VecindadMasLarga)
+vecindadDeMismoColorMasLarga(T, V, VCL) :- vecinosDelMismoColor(T, V, VCL), length(VCL, L),
+                                            not((vecinosDelMismoColor(T, V, VC), length(VC, Ls), Ls > L)).
+
+% vecinosDelMismoColor(+Tableroinicial, +Vecinos, -VecinosDelMismoColor)
+vecinosDelMismoColor(T, V, VC) :- estaContenida(V, VC), tieneDosOMasElementos(VC), todosDelMismoColor(T, VC).
+
+% estaContenida(+Lista, ?Sublista)
+estaContenida([], []).
+estaContenida([E|L], [E|S]) :- estaContenida(L, S).
+estaContenida([_|L], S) :- estaContenida(L, S).
+
+% noEstaVacia(+L)
+noEstaVacia(L) :- length(L, N), N > 0.
+
+% tieneDosOMasElementos(+Lista)
+tieneDosOMasElementos(L) :- length(L, N), N > 1.
+
+% todosDelMismoColor(+Tablero, +Coordenadas)
+todosDelMismoColor(T, CS) :- todosDeColor(T, CS, _).
+
+% todosDeColor(+Tablero, +Coordenadas, ?Color)
+todosDeColor(_, [], _).
+todosDeColor(T, [P|Ps], C) :- color(T, C, P), todosDeColor(T, Ps, C).
 
 % ----------------
 % Ejercicio 5.b)
