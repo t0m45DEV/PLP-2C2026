@@ -266,7 +266,8 @@ todosDeColor(T, [P|Ps], C) :- color(T, C, P), todosDeColor(T, Ps, C).
 % jugarPosiciones(+TableroInicial, +Jugadas, -TableroResultante)
 % Precondición: esMatriz(TableroInicial).
 % Precondición: para cada Coordenada en Jugadas: coordenadaEnRango(TableroInicial, Coordenada).
-jugarPosiciones(_, _, _) :- completar("Ejercicio 5.b").
+jugarPosiciones(T, [], T).
+jugarPosiciones(TI, [P|PS], TR) :- jugarPosición(TI, P, Tt), jugarPosiciones(Tt, PS, TR).
 
 % jugarNaive(+TableroInicial, -TableroFinal)
 % Precondición: esMatriz(TableroInicial).
