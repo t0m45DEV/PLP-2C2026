@@ -305,7 +305,7 @@ esTableroVacio(T) :- not((coordenada(T,C), color(T, _, C))).
 
 % juegoNaiveVictorioso(+Tablero, -Jugadas)
 % Precondición: esMatriz(Tablero).
-juegoNaiveVictorioso(_, _) :- completar("Ejercicio 7.b").
+juegoNaiveVictorioso(T, JS) :- jugadasNaive(T, JS), victoriaConJugadas(T, JS).
 
 % ----------------
 % Ejercicio 7.c)
