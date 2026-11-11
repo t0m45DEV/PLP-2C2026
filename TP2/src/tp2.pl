@@ -321,7 +321,11 @@ mejorJuegoNaive(T, JS) :- juegoNaiveVictorioso(T, JS), length(JS, N),
 % ----------------
 
 % tableroEnElQueNaiveGanaEmpezandoPor(-Tablero, +Coordenada)
-tableroEnElQueNaiveGanaEmpezandoPor(_, _) :- completar("Ejercicio 8").
+tableroEnElQueNaiveGanaEmpezandoPor(T, J) :- between(0, inf, X), tableroDeTamaño(T, X),
+                                            juegoNaiveVictorioso(T, [J | _]).
+
+% tableroDeTamaño(-Tablero, +Tamaño)
+tableroDeTamaño(T, X) :- between(0, X, F), C is X - F, tamaño(T, F, C).
 
 % ----------------
 % Interfaz gráfica
