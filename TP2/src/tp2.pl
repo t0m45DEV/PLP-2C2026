@@ -30,6 +30,15 @@ tamaño(M, F, C) :- length(M, F), todasFilasMiden(C, M).
 % Precondición: esMatriz(Matriz)
 coordenadaEnRango(M, (X, Y)) :- tamaño(M, F, C), X > 0, X =< F, Y > 0, Y =< C.
 
+% Reversibilidad sobre Matriz:
+%   No es reversible, tamaño/3 sin ningun argumento instanciado genera todas las matrices con una
+%   fila y Y columnas, pero si la coordenada dada tiene una X mayor a uno, no va a encontrar
+%   ninguna matriz de una fila que satisfaga dicha coordenada.
+
+% Reversibilidad sobre Coordenada:
+%   No es reversible, porque tanto X como Y DEBEN estar instanciados por las comparaciones aritmeticas.
+%   El motor de Prolog no puede hacerlas con valores no instanciados.
+
 % ----------------
 % Observadores de tablero.
 % ----------------
