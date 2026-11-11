@@ -313,7 +313,8 @@ juegoNaiveVictorioso(T, JS) :- jugadasNaive(T, JS), victoriaConJugadas(T, JS).
 
 % mejorJuegoNaive(+Tablero, -Jugadas)
 % Precondición: esMatriz(Tablero).
-mejorJuegoNaive(_, _) :- completar("Ejercicio 7.c").
+mejorJuegoNaive(T, JS) :- juegoNaiveVictorioso(T, JS), length(JS, N),
+                            not((juegoNaiveVictorioso(T, JSp), length(JSp, Np), Np > N)).
 
 % ----------------
 % Ejercicio 8 - OPCIONAL
