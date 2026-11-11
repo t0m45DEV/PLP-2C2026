@@ -314,6 +314,8 @@ tableroEnElQueNaiveGanaEmpezandoPor(T, J) :- between(0, inf, X), tableroDeTamañ
 % tableroDeTamaño(-Tablero, +Tamaño)
 tableroDeTamaño(T, X) :- between(0, X, F), C is X - F, tamaño(T, F, C).
 
+% Anda, pero genera repetidos.
+
 % ----------------
 % Interfaz gráfica
 % ----------------
